@@ -132,6 +132,10 @@ const Client = () => {
                 selector: row => row.lastname
             },
             {
+                name: 'GÉNERO',
+                selector: row => row.genre
+            },
+            {
                 name: 'FECHA NACIMIENTO',
                 selector: row => row.date
             },
