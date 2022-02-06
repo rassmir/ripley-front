@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {Fragment} from 'react'
+import history from './routes/history';
+import {Route, Router} from "react-router-dom";
+import routes from "./routes/routes";
+import Sidebar from "./layouts/Sidebar";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+    return (
+        <Router history={history}>
+            <Fragment>
+                {routes.map((route, index) => {
+                    return (
+                        <RouteWrapper
+                            key={index}
+                            path={route.path}
+                            exact={route.exact}
+                            layout={Sidebar}
+                            component={route.component}/>
+                    )
+                })}
+            </Fragment>
+        </Router>
+    )
 }
 
+const RouteWrapper = ({component: Component, layout: Layout, ...rest}) => {
+    return (
+        <Fragment>
+            <Route {...rest} render={(props) =>
+                <Layout {...props}>
+                    <Component {...props} />
+                </Layout>
+            } />
+        </Fragment>
+    )
+}
 export default App;
