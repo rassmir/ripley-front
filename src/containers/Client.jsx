@@ -263,6 +263,17 @@ const Client = () => {
                             </div>
                             <div>
                                 <label className="block text-purple-800 text-sm font-bold mb-2" htmlFor="name">
+                                    Genero
+                                </label>
+                                <select {...register("genre", {required: true})} className="shadow border rounded w-full py-3 px-3 text-gray-700">
+                                    <option value="male">Hombre</option>
+                                    <option value="female">Mujer</option>
+                                </select>
+                                {errors.genre?.type === 'required' &&
+                                    <p className="text-xs text-red-500 mt-1 absolute">Este campo es requerido</p>}
+                            </div>
+                            <div>
+                                <label className="block text-purple-800 text-sm font-bold mb-2" htmlFor="name">
                                     Fecha De Nacimiento
                                 </label>
                                 <input
