@@ -26,16 +26,19 @@ const Client = () => {
         name: ''
     })
     const {clients} = useSelector(state => state.clientsReducers);
+    console.log(clients);
     useEffect(() => {
         dispatch(getAll('clients', LOAD_CLIENT, GET_ALL_CLIENTS, ERROR_CLIENT))
-    }, [])
+    }, [dispatch])
 
     const {register, formState: {errors}, handleSubmit, reset, setValue} = useForm();
+
     const openCloseCreateClient = () => {
         setModalCreateClient(!modalCreateClient)
         reset({
             name: '',
             lastname: '',
+            genre: '',
             date: ''
         })
     }
@@ -52,7 +55,9 @@ const Client = () => {
         setValue('id', row.id)
         setValue('name', row.name)
         setValue('lastname', row.lastname)
+        setValue('genre', row.genre)
         setValue('date', row.date)
+
         setClient({
             name: row.name
         })
@@ -65,8 +70,8 @@ const Client = () => {
         }
     }
 
-    const FormCreateCategory = (data) => {
-        const {name, lastname, genre,date} = data;
+    const FormCreateClient = (data) => {
+        const {name, lastname, genre, date} = data;
         const params = new URLSearchParams();
         params.append('_method', 'POST');
         params.append('name', name);
@@ -79,16 +84,17 @@ const Client = () => {
     }
 
     const FormEditClient = (data) => {
-        const {name, lastname, date, id} = data;
+        const {name, lastname, date, genre, id} = data;
         const params = new URLSearchParams();
         params.append('_method', 'PUT');
         params.append('name', name);
+        params.append('genre', genre);
         params.append('lastname', lastname);
         params.append('date', date);
         dispatch(updateAll('clients', id, params, UPDATE_CLIENT, ERROR_CLIENT, 'Actualizado Correctamente', ''))
-
         setModalEditClient(false);
     }
+
     const FormDeleteClient = (data) => {
         const {id} = data;
         dispatch(deleteAll('clients', id, DELETE_CLIENT, ERROR_CLIENT, 'Eliminado Correctamente', ''))
@@ -164,7 +170,7 @@ const Client = () => {
         return (
             <Fragment>
                 <Modal height="max-w-2xl" onOpen={modalCreateClient} onClose={setModalCreateClient}>
-                    <form onSubmit={handleSubmit(FormCreateCategory)} className="p-8">
+                    <form onSubmit={handleSubmit(FormCreateClient)} className="p-8">
                         <div className="grid grid-cols-1 gap-y-6">
                             <div>
                                 <label className="block text-purple-800 text-sm font-bold mb-2" htmlFor="name">
@@ -200,7 +206,8 @@ const Client = () => {
                                 <label className="block text-purple-800 text-sm font-bold mb-2" htmlFor="name">
                                     Genero
                                 </label>
-                                <select {...register("genre", {required: true})} className="shadow border rounded w-full py-3 px-3 text-gray-700">
+                                <select {...register("genre", {required: true})}
+                                        className="shadow border rounded w-full py-3 px-3 text-gray-700">
                                     <option value="male">Hombre</option>
                                     <option value="female">Mujer</option>
                                 </select>
@@ -255,7 +262,7 @@ const Client = () => {
                                     Apellido Completo
                                 </label>
                                 <input
-                                    id="name"
+                                    id="lastname"
                                     className={`shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${
                                         errors.lastname ? "border-red-500 ring-1 ring-red-500" : "focus:border-primary focus:ring-1 focus:ring-primary"
                                     }`}
@@ -269,7 +276,8 @@ const Client = () => {
                                 <label className="block text-purple-800 text-sm font-bold mb-2" htmlFor="name">
                                     Genero
                                 </label>
-                                <select {...register("genre", {required: true})} className="shadow border rounded w-full py-3 px-3 text-gray-700">
+                                <select {...register("genre", {required: true})}
+                                        className="shadow border rounded w-full py-3 px-3 text-gray-700">
                                     <option value="male">Hombre</option>
                                     <option value="female">Mujer</option>
                                 </select>
@@ -304,9 +312,9 @@ const Client = () => {
                 <Modal height="max-w-2xl" onOpen={modalDeleteClient} onClose={setModalDeleteClient}>
                     <form onSubmit={handleSubmit(FormDeleteClient)} className="p-8">
                         <div className="grid grid-cols-1 gap-y-6">
-                            <h2 className="text-[20px] text-center font-semibold">Estás seguro que deseas
+                            <h2 className="text-[20px] text-center font-Poppins-Sb">Estás seguro que deseas
                                 eliminar al cliente: <br/>
-                                <span className="text-purple-800">"{client.name}"</span> ?</h2>
+                                <span className="text-primary">"{client.name}"</span> ?</h2>
                             <div>
                                 <button
                                     className="w-full bg-red-600 hover:bg-red-500 text-white font-Poppins-Bd py-3 px-4 rounded">
